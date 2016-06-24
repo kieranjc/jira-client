@@ -71,7 +71,7 @@ public class SprintReport {
             restclient);
         incompletedIssues = GreenHopperField.getResourceArray(
             SprintIssue.class,
-            map.get("incompletedIssues"),
+            map.get("issuesNotCompletedInCurrentSprint"),
             restclient);
         puntedIssues = GreenHopperField.getResourceArray(
             SprintIssue.class,
