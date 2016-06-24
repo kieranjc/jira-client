@@ -32,6 +32,7 @@ public class Status extends Resource {
     private String description = null;
     private String iconUrl = null;
     private String name = null;
+	private String statusCategory = null;
 
     /**
      * Creates a status from a JSON payload.
@@ -54,6 +55,8 @@ public class Status extends Resource {
         description = Field.getString(map.get("description"));
         iconUrl = Field.getString(map.get("iconUrl"));
         name = Field.getString(map.get("name"));
+        JSONObject sc = (JSONObject)map.get("statusCategory");
+        statusCategory  = (String)sc.get("key");
     }
 
     /**
@@ -98,6 +101,10 @@ public class Status extends Resource {
 
     public String getIconUrl() {
         return iconUrl;
+    }
+    
+    public String getStatusCategory() {
+    	return statusCategory;
     }
 }
 
