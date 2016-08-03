@@ -42,11 +42,16 @@ public class SprintReport {
     private List<SprintIssue> completedIssues = null;
     private List<SprintIssue> incompletedIssues = null;
     private List<SprintIssue> puntedIssues = null;
+	private List<SprintIssue> issuesCompletedInAnotherSprint = null;    
     private EstimateSum completedIssuesEstimateSum = null;
     private EstimateSum incompletedIssuesEstimateSum = null;
     private EstimateSum allIssuesEstimateSum = null;
     private EstimateSum puntedIssuesEstimateSum = null;
     private List<String> issueKeysAddedDuringSprint = null;
+	private EstimateSum completedIssuesInitialEstimateSum;
+	private EstimateSum issuesNotCompletedInitialEstimateSum;
+	private EstimateSum issuesCompletedInAnotherSprintInitialEstimateSum;
+	private EstimateSum issuesCompletedInAnotherSprintEstimateSum;
 
     /**
      * Creates a sprint report from a JSON payload.
@@ -63,6 +68,7 @@ public class SprintReport {
 
     private void deserialise(JSONObject json) {
         Map map = json;
+        System.out.println(map);
 
         sprint = GreenHopperField.getResource(Sprint.class, map.get("sprint"), restclient);
         completedIssues = GreenHopperField.getResourceArray(
@@ -77,14 +83,28 @@ public class SprintReport {
             SprintIssue.class,
             map.get("puntedIssues"),
             restclient);
+        issuesCompletedInAnotherSprint = GreenHopperField.getResourceArray(
+        		SprintIssue.class,
+        		map.get("issuesCompletedInAnotherSprint"),
+        		restclient);      
         completedIssuesEstimateSum = GreenHopperField.getEstimateSum(
             map.get("completedIssuesEstimateSum"));
         incompletedIssuesEstimateSum = GreenHopperField.getEstimateSum(
-            map.get("incompletedIssuesEstimateSum"));
+            map.get("issuesNotCompletedEstimateSum"));
         allIssuesEstimateSum = GreenHopperField.getEstimateSum(
             map.get("allIssuesEstimateSum"));
         puntedIssuesEstimateSum = GreenHopperField.getEstimateSum(
             map.get("puntedIssuesEstimateSum"));
+        completedIssuesInitialEstimateSum = GreenHopperField.getEstimateSum(
+        		map.get("completedIssuesInitialEstimateSum"));
+        issuesNotCompletedInitialEstimateSum = GreenHopperField.getEstimateSum(
+        		map.get("issuesNotCompletedInitialEstimateSum"));
+        completedIssuesInitialEstimateSum = GreenHopperField.getEstimateSum(
+        		map.get("puntedIssuesInitialEstimateSum"));
+        issuesCompletedInAnotherSprintInitialEstimateSum = GreenHopperField.getEstimateSum(
+        		map.get("issuesCompletedInAnotherSprintInitialEstimateSum"));
+        issuesCompletedInAnotherSprintEstimateSum = GreenHopperField.getEstimateSum(
+        		map.get("issuesCompletedInAnotherSprintEstimateSum"));
         issueKeysAddedDuringSprint = GreenHopperField.getStringArray(
             map.get("issueKeysAddedDuringSprint"));
     }
@@ -165,6 +185,26 @@ public class SprintReport {
     public List<String> getIssueKeysAddedDuringSprint() {
         return issueKeysAddedDuringSprint;
     }
+
+	public List<SprintIssue> getIssuesCompletedInAnotherSprint() {
+		return issuesCompletedInAnotherSprint;
+	}
+
+	public EstimateSum getCompletedIssuesInitialEstimateSum() {
+		return completedIssuesInitialEstimateSum;
+	}
+
+	public EstimateSum getIssuesNotCompletedInitialEstimateSum() {
+		return issuesNotCompletedInitialEstimateSum;
+	}
+
+	public EstimateSum getIssuesCompletedInAnotherSprintInitialEstimateSum() {
+		return issuesCompletedInAnotherSprintInitialEstimateSum;
+	}
+
+	public EstimateSum getIssuesCompletedInAnotherSprintEstimateSum() {
+		return issuesCompletedInAnotherSprintEstimateSum;
+	}
 }
 
 
