@@ -125,29 +125,47 @@ public class SprintReport {
 
         final int rvId = rv.getId();
         final int sprintId = sprint.getId();
-        JSON result = null;
 
-        try {
-            URI reporturi = restclient.buildURI(
-                GreenHopperResource.RESOURCE_URI + "rapid/charts/sprintreport",
-                new HashMap<String, String>() {{
-                    put("rapidViewId", Integer.toString(rvId));
-                    put("sprintId", Integer.toString(sprintId));
-                }});
-            result = restclient.get(reporturi);
-        } catch (Exception ex) {
-            throw new JiraException("Failed to retrieve sprint report", ex);
-        }
-
-        if (!(result instanceof JSONObject))
-            throw new JiraException("JSON payload is malformed");
-
-        JSONObject jo = (JSONObject)result;
-
-        if (!jo.containsKey("contents") || !(jo.get("contents") instanceof JSONObject))
-            throw new JiraException("Sprint report content is malformed");
-
-        return new SprintReport(restclient, (JSONObject)jo.get("contents"));
+        return get(restclient, rvId, sprintId);
+    }
+    
+    /**
+     * Retrieves the sprint report for the given rapid view and sprint.
+     *
+     * @param restclient REST client instance
+     * @param rvId Rapid View instance id
+     * @param sprintId Sprint instance id
+     *
+     * @return the sprint report
+     *
+     * @throws JiraException when the retrieval fails
+     */
+    public static SprintReport get(RestClient restclient, final int rvId , final int sprintId)
+    		throws JiraException {
+ 
+    	JSON result = null;
+    	
+    	try {
+    		URI reporturi = restclient.buildURI(
+    				GreenHopperResource.RESOURCE_URI + "rapid/charts/sprintreport",
+    				new HashMap<String, String>() {{
+    					put("rapidViewId", Integer.toString(rvId));
+    					put("sprintId", Integer.toString(sprintId));
+    				}});
+    		result = restclient.get(reporturi);
+    	} catch (Exception ex) {
+    		throw new JiraException("Failed to retrieve sprint report", ex);
+    	}
+    	
+    	if (!(result instanceof JSONObject))
+    		throw new JiraException("JSON payload is malformed");
+    	
+    	JSONObject jo = (JSONObject)result;
+    	
+    	if (!jo.containsKey("contents") || !(jo.get("contents") instanceof JSONObject))
+    		throw new JiraException("Sprint report content is malformed");
+    	
+    	return new SprintReport(restclient, (JSONObject)jo.get("contents"));
     }
 
     public Sprint getSprint() {
