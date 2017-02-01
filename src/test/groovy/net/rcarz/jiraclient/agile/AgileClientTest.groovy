@@ -25,7 +25,11 @@ class AgileClientTest extends AbstractResourceTest {
 
         assertThat boards, new IsNot<>(new IsNull())
         assertThat boards.size(), new IsEqual<Integer>(2)
+<<<<<<< Updated upstream
         "Assert equals to Board ${JSONResources.BOARD_ID}"(boards.get(0))
+=======
+        "Assert equals to Board"(boards.get(0))
+>>>>>>> Stashed changes
     }
 
     @Test
@@ -37,7 +41,11 @@ class AgileClientTest extends AbstractResourceTest {
         Board board = agileClient.getBoard(JSONResources.BOARD_ID);
 
         assertThat board, new IsNot<>(new IsNull())
+<<<<<<< Updated upstream
         "Assert equals to Board ${JSONResources.BOARD_ID}"(board)
+=======
+        "Assert equals to Board"(board)
+>>>>>>> Stashed changes
     }
 
     @Test
@@ -49,7 +57,11 @@ class AgileClientTest extends AbstractResourceTest {
         Sprint sprint = agileClient.getSprint(JSONResources.SPRINT_ID);
 
         assertThat sprint, new IsNot<>(new IsNull())
+<<<<<<< Updated upstream
         "Assert equals to Sprint ${JSONResources.SPRINT_ID}"(sprint)
+=======
+        "Assert equals to Sprint"(sprint)
+>>>>>>> Stashed changes
     }
 
     @Test
@@ -60,7 +72,11 @@ class AgileClientTest extends AbstractResourceTest {
 
         Issue issue = agileClient.getIssue(JSONResources.ISSUE_ID);
 
+<<<<<<< Updated upstream
         "Assert equals to Issue ${JSONResources.ISSUE_ID}"(issue)
+=======
+        "Assert equals to Issue"(issue)
+>>>>>>> Stashed changes
     }
 
     @Test
@@ -71,7 +87,11 @@ class AgileClientTest extends AbstractResourceTest {
 
         Issue issue = agileClient.getIssue(JSONResources.ISSUE_KEY);
 
+<<<<<<< Updated upstream
         "Assert equals to Issue ${JSONResources.ISSUE_KEY}"(issue)
+=======
+        "Assert equals to Issue"(issue)
+>>>>>>> Stashed changes
     }
 
     @Test
@@ -82,6 +102,10 @@ class AgileClientTest extends AbstractResourceTest {
 
         Epic epic = agileClient.getEpic(JSONResources.EPIC_ID);
 
+<<<<<<< Updated upstream
         "Assert equals to Epic ${JSONResources.EPIC_ID}"(epic)
+=======
+        "Assert equals to Epic"(epic)
+>>>>>>> Stashed changes
     }
 }

@@ -28,6 +28,10 @@ import java.util.List;
 /**
  * An Agile extension to the JIRA client.
  *
+<<<<<<< Updated upstream
+=======
+ * @author pldupont
+>>>>>>> Stashed changes
  * @see "https://docs.atlassian.com/jira-software/REST/cloud/"
  */
 public class AgileClient {
@@ -107,5 +111,12 @@ public class AgileClient {
     public Epic getEpic(long id) throws JiraException {
         return Epic.get(restclient, id);
     }
+<<<<<<< Updated upstream
+=======
+
+    public RestClient getRestclient() {
+        return restclient;
+    }
+>>>>>>> Stashed changes
 }
 

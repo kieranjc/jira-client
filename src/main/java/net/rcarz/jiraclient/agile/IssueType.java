@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-package net.rcarz.jiraclient.agile;
-
-=======
 /**
  * jira-client - a simple JIRA REST client
  * Copyright (c) 2013 Bob Carroll (bob.carroll@alum.rit.edu)
@@ -25,38 +21,26 @@ package net.rcarz.jiraclient.agile;
 
 import net.rcarz.jiraclient.Field;
 import net.rcarz.jiraclient.JiraException;
->>>>>>> Stashed changes
 import net.rcarz.jiraclient.RestClient;
 import net.sf.json.JSONObject;
 
 /**
-<<<<<<< Updated upstream
- * Created by pldupont on 2016-05-20.
- */
-public class Project extends AgileResource {
-
-=======
- * Represents an Agile Project.
+ * Represents an Agile IssueType.
  *
  * @author pldupont
  */
-public class Project extends AgileResource {
+public class IssueType extends AgileResource {
 
-    private String key;
+    private String description;
+    private boolean subTask;
 
->>>>>>> Stashed changes
     /**
      * Creates a new Agile resource.
      *
      * @param restclient REST client instance
      * @param json       JSON payload
      */
-<<<<<<< Updated upstream
-    public Project(RestClient restclient, JSONObject json) {
-        super(restclient, json);
-    }
-=======
-    public Project(RestClient restclient, JSONObject json) throws JiraException {
+    public IssueType(RestClient restclient, JSONObject json) throws JiraException {
         super(restclient, json);
     }
 
@@ -70,11 +54,15 @@ public class Project extends AgileResource {
     void deserialize(JSONObject json) throws JiraException {
         super.deserialize(json);
 
-        this.key = Field.getString(json.get("key"));
+        this.description = Field.getString(json.get("description"));
+        this.subTask = Field.getBoolean(json.get("subtask"));
     }
 
-    public String getKey() {
-        return key;
+    public String getDescription() {
+        return description;
     }
->>>>>>> Stashed changes
+
+    public boolean isSubTask() {
+        return subTask;
+    }
 }

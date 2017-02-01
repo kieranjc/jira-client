@@ -34,12 +34,15 @@ import java.util.List;
  */
 public class Sprint extends AgileResource {
 
+<<<<<<< Updated upstream
     private static final String ATTR_STATE = "state";
     private static final String ATTR_ORIGIN_BOARD_ID = "originBoardId";
     private static final String ATTR_START_DATE = "startDate";
     private static final String ATTR_END_DATE = "endDate";
     private static final String ATTR_COMPLETE_DATE = "completeDate";
 
+=======
+>>>>>>> Stashed changes
     private String state;
     private long originBoardId;
     private Date startDate;
@@ -52,7 +55,11 @@ public class Sprint extends AgileResource {
      * @param restclient REST client instance
      * @param json       JSON payload
      */
+<<<<<<< Updated upstream
     protected Sprint(RestClient restclient, JSONObject json) {
+=======
+    protected Sprint(RestClient restclient, JSONObject json) throws JiraException {
+>>>>>>> Stashed changes
         super(restclient, json);
     }
 
@@ -80,6 +87,7 @@ public class Sprint extends AgileResource {
         return AgileResource.list(restclient, Sprint.class, RESOURCE_URI + "board/" + boardId + "/sprint");
     }
 
+<<<<<<< Updated upstream
     @Override
     protected void deserialize(JSONObject json) {
         super.deserialize(json);
@@ -88,6 +96,24 @@ public class Sprint extends AgileResource {
         startDate = Field.getDateTime(json.get(ATTR_START_DATE));
         endDate = Field.getDateTime(json.get(ATTR_END_DATE));
         completeDate = Field.getDateTime(json.get(ATTR_COMPLETE_DATE));
+=======
+    /**
+     * @return All issues in the Sprint.
+     * @throws JiraException when the retrieval fails
+     */
+    public List<Issue> getIssues() throws JiraException {
+        return AgileResource.list(getRestclient(), Issue.class, RESOURCE_URI + "sprint/" + getId() + "/issue", "issues");
+    }
+
+    @Override
+    protected void deserialize(JSONObject json) throws JiraException {
+        super.deserialize(json);
+        state = Field.getString(json.get("state"));
+        originBoardId = getLong(json.get("originBoardId"));
+        startDate = Field.getDateTime(json.get("startDate"));
+        endDate = Field.getDateTime(json.get("endDate"));
+        completeDate = Field.getDateTime(json.get("completeDate"));
+>>>>>>> Stashed changes
     }
 
     public String getState() {

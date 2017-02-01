@@ -3,6 +3,10 @@ package net.rcarz.jiraclient.agile
 import net.rcarz.jiraclient.JiraException
 import net.rcarz.jiraclient.RestClient
 import net.rcarz.jiraclient.RestException
+<<<<<<< Updated upstream
+=======
+import net.sf.json.JSONObject
+>>>>>>> Stashed changes
 import net.sf.json.JSONSerializer
 import org.hamcrest.core.IsEqual
 import org.hamcrest.core.IsNot
@@ -33,7 +37,11 @@ class BoardTest extends AbstractResourceTest {
 
         assertThat boards, new IsNot<>(new IsNull())
         assertThat boards.size(), new IsEqual<Integer>(2)
+<<<<<<< Updated upstream
         "Assert equals to Board 84"(boards.get(0))
+=======
+        "Assert equals to Board"(boards.get(0))
+>>>>>>> Stashed changes
     }
 
     @Test
@@ -56,7 +64,11 @@ class BoardTest extends AbstractResourceTest {
 
         Board board = Board.get(mockRestClient, JSONResources.BOARD_ID);
 
+<<<<<<< Updated upstream
         "Assert equals to Board 84"(board)
+=======
+        "Assert equals to Board"(board)
+>>>>>>> Stashed changes
     }
 
     @Test
@@ -74,6 +86,7 @@ class BoardTest extends AbstractResourceTest {
     @Test
     void "Given a valid Board, when calling getSprints(), then receive a list of Sprints."() {
         RestClient mockRestClient = "given a REST Client"()
+<<<<<<< Updated upstream
         when(mockRestClient.get(AgileResource.RESOURCE_URI + "board/${JSONResources.BOARD_ID}"))
                 .thenReturn(JSONSerializer.toJSON(JSONResources.BOARD))
         when(mockRestClient.get(AgileResource.RESOURCE_URI + "board/${JSONResources.BOARD_ID}/sprint"))
@@ -87,5 +100,58 @@ class BoardTest extends AbstractResourceTest {
         assertThat sprints, new IsNot<>(new IsNull())
         assertThat sprints.size(), new IsEqual<Integer>(2)
         "Assert equals to Sprint ${JSONResources.SPRINT_ID}"(sprints.get(0))
+=======
+        Board mockBoard = new Board(mockRestClient, JSONSerializer.toJSON(JSONResources.BOARD) as JSONObject)
+        when(mockRestClient.get(AgileResource.RESOURCE_URI + "board/${JSONResources.BOARD_ID}/sprint"))
+                .thenReturn(JSONSerializer.toJSON(JSONResources.LIST_OF_SPRINTS))
+
+        List<Sprint> sprints = mockBoard.getSprints();
+
+        assertThat sprints, new IsNot<>(new IsNull())
+        assertThat sprints.size(), new IsEqual<Integer>(2)
+        "Assert equals to Sprint"(sprints.get(0))
+    }
+
+    @Test
+    void "Given a valid Board, when calling getEpics(), then receive a list of Epics."() {
+        RestClient mockRestClient = "given a REST Client"()
+        Board mockBoard = new Board(mockRestClient, JSONSerializer.toJSON(JSONResources.BOARD) as JSONObject)
+        when(mockRestClient.get(AgileResource.RESOURCE_URI + "board/${JSONResources.BOARD_ID}/epic"))
+                .thenReturn(JSONSerializer.toJSON(JSONResources.LIST_OF_EPICS))
+
+        List<Epic> epics = mockBoard.getEpics();
+
+        assertThat epics, new IsNot<>(new IsNull())
+        assertThat epics.size(), new IsEqual<Integer>(2)
+        "Assert equals to Epic"(epics.get(0))
+    }
+
+    @Test
+    void "Given a valid Board, when calling getBacklog(), then receive a list of Issues."() {
+        RestClient mockRestClient = "given a REST Client"()
+        Board mockBoard = new Board(mockRestClient, JSONSerializer.toJSON(JSONResources.BOARD) as JSONObject)
+        when(mockRestClient.get(AgileResource.RESOURCE_URI + "board/${JSONResources.BOARD_ID}/backlog"))
+                .thenReturn(JSONSerializer.toJSON(JSONResources.LIST_OF_ISSUES))
+
+        List<Issue> backlog = mockBoard.getBacklog();
+
+        assertThat backlog, new IsNot<>(new IsNull())
+        assertThat backlog.size(), new IsEqual<Integer>(4)
+        "Assert equals to Issue"(backlog.get(0))
+    }
+
+    @Test
+    void "Given a valid Board, when calling getIssuesWithoutEpic(), then receive a list of Issues."() {
+        RestClient mockRestClient = "given a REST Client"()
+        Board mockBoard = new Board(mockRestClient, JSONSerializer.toJSON(JSONResources.BOARD) as JSONObject)
+        when(mockRestClient.get(AgileResource.RESOURCE_URI + "board/${JSONResources.BOARD_ID}/epic/none/issue"))
+                .thenReturn(JSONSerializer.toJSON(JSONResources.LIST_OF_ISSUES))
+
+        List<Issue> issues = mockBoard.getIssuesWithoutEpic();
+
+        assertThat issues, new IsNot<>(new IsNull())
+        assertThat issues.size(), new IsEqual<Integer>(4)
+        "Assert equals to Issue"(issues.get(0))
+>>>>>>> Stashed changes
     }
 }

@@ -127,6 +127,11 @@ public class Example {
             /* Now let's start progress on this issue. */
             issue.transition().execute("Start Progress");
 
+            /* Add the first comment and update it */
+            Comment comment = issue.addComment("I am a comment!");
+            comment.update("I am the first comment!");
+            issue.getComments().get(0).update("this works too!");
+
             /* Pretend customfield_1234 is a text field. Get the raw field value... */
             Object cfvalue = issue.getField("customfield_1234");
 
@@ -193,6 +198,12 @@ public class Example {
             System.out.println("Total: " + sr.total);
             for (Issue i : sr.issues)
                 System.out.println("Result: " + i);
+
+            /* Search with paging (optionally 10 issues at a time). There are optional
+               arguments for including/expanding fields, and page size/start. */
+            Issue.SearchResult sr = jira.searchIssues("project IN (GOTHAM) ORDER BY id");
+            while (sr.iterator().hasNext())
+                System.out.println("Result: " + sr.iterator().next());
 
         } catch (JiraException ex) {
             System.err.println(ex.getMessage());
@@ -273,12 +284,14 @@ public class Example {
                 System.err.println(ex.getCause().getMessage());
         }
     }
+}
 ```
 
 ## Agile API ##
 https://docs.atlassian.com/jira-software/REST/cloud/
 
 ### Agile supported calls ###
+<<<<<<< Updated upstream
  1. [AgileClient](src/main/java/net/rcarz/jiraclient/agile/AgileClient.java)
     1. GET /rest/agile/1.0/board
     1. GET /rest/agile/1.0/board/{boardId}
@@ -303,11 +316,38 @@ https://docs.atlassian.com/jira-software/REST/cloud/
     1. -- GET /rest/agile/1.0/epic/{epicIdOrKey}/issue
     1. -- GET /rest/agile/1.0/epic/none/issue
     1. -- GET /rest/agile/1.0/sprint/{sprintId}/issue
+=======
+| Class | Method | REST Call |
+| ----- | ------ | --------- |
+| [AgileClient](src/main/java/net/rcarz/jiraclient/agile/AgileClient.java) | ```List<Board> getBoards()``` | GET /rest/agile/1.0/board |
+| | ```Board getBoard(long id)``` | GET /rest/agile/1.0/board/{boardId} |
+| | ```Sprint getSprint(long id)``` | GET /rest/agile/1.0/sprint/{sprintId} |
+| | ```Epic getEpic(long id)``` | GET /rest/agile/1.0/epic/{epicId} |
+| | ```Issue getIssue(long id)``` | GET /rest/agile/1.0/issue/{issueId} |
+| | ```Issue getIssue(String key)``` | GET /rest/agile/1.0/issue/{issueKey} |
+| [Board](src/main/java/net/rcarz/jiraclient/agile/Board.java) | ``` static List<Board> getAll(RestClient restclient)``` | GET /rest/agile/1.0/board |
+| | ```static Board get(RestClient restclient, long id)``` | GET /rest/agile/1.0/board/{boardId} |
+| | ```List<Sprint> getSprints()``` | GET /rest/agile/1.0/board/{boardId}/sprint |
+| * | ```List<Epic> getEpics()``` | GET /rest/agile/1.0/board/{boardId}/epic
+| * | ```List<Issue> getBacklog()``` | GET /rest/agile/1.0/board/{boardId}/backlog
+| * | ```List<Issue> getIssuesWithoutEpic()``` | GET /rest/agile/1.0/board/{boardId}/epic/none/issue
+| [Sprint](src/main/java/net/rcarz/jiraclient/agile/Sprint.java) | ``` static Sprint get(RestClient restclient, long sprintId)``` | GET /rest/agile/1.0/sprint/{sprintId} |
+| | ```static List<Sprint> getAll(RestClient restclient, long boardId)``` | GET /rest/agile/1.0/board/{boardId}/sprint |
+| * | ```List<Issue> getIssues()``` | GET /rest/agile/1.0/sprint/{sprintId}/issue |
+| [Epic](src/main/java/net/rcarz/jiraclient/agile/Epic.java) | ```static Epic get(RestClient restclient, long id)``` | GET /rest/agile/1.0/epic/{epicId} |
+| * | ```List<Issue> getIssues()``` | GET /rest/agile/1.0/epic/{epicId}/issue |
+| [Issue](src/main/java/net/rcarz/jiraclient/agile/Issue.java) | ```static Issue get(RestClient restclient, long id)``` | GET /rest/agile/1.0/issue/{issueId} |
+| | ```static Issue get(RestClient restclient, String key)``` | GET /rest/agile/1.0/issue/{issueKey} |
+>>>>>>> Stashed changes
     
     
 
 ### Agile Example ###
+<<<<<<< Updated upstream
 
+=======
+To see more examples, look at [AgileClientDemoTest](src/test/groovy/AgileClientDemoTest.groovy)
+>>>>>>> Stashed changes
 ```java
 import java.util.List;
 

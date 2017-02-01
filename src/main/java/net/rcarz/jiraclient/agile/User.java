@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-package net.rcarz.jiraclient.agile;
-
-=======
 /**
  * jira-client - a simple JIRA REST client
  * Copyright (c) 2013 Bob Carroll (bob.carroll@alum.rit.edu)
@@ -25,38 +21,28 @@ package net.rcarz.jiraclient.agile;
 
 import net.rcarz.jiraclient.Field;
 import net.rcarz.jiraclient.JiraException;
->>>>>>> Stashed changes
 import net.rcarz.jiraclient.RestClient;
 import net.sf.json.JSONObject;
 
 /**
-<<<<<<< Updated upstream
- * Created by pldupont on 2016-05-20.
- */
-public class Project extends AgileResource {
-
-=======
- * Represents an Agile Project.
+ * Represents an Agile User.
  *
  * @author pldupont
  */
-public class Project extends AgileResource {
+public class User extends AgileResource {
 
-    private String key;
+    private String emailAddress;
+    private String displayName;
+    private boolean active;
+    private String timeZone;
 
->>>>>>> Stashed changes
     /**
      * Creates a new Agile resource.
      *
      * @param restclient REST client instance
      * @param json       JSON payload
      */
-<<<<<<< Updated upstream
-    public Project(RestClient restclient, JSONObject json) {
-        super(restclient, json);
-    }
-=======
-    public Project(RestClient restclient, JSONObject json) throws JiraException {
+    public User(RestClient restclient, JSONObject json) throws JiraException {
         super(restclient, json);
     }
 
@@ -69,12 +55,30 @@ public class Project extends AgileResource {
     @Override
     void deserialize(JSONObject json) throws JiraException {
         super.deserialize(json);
-
-        this.key = Field.getString(json.get("key"));
+        this.emailAddress = Field.getString(json.get("emailAddress"));
+        this.displayName = Field.getString(json.get("displayName"));
+        this.active = Field.getBoolean(json.get("active"));
+        this.timeZone = Field.getString(json.get("timeZone"));
     }
 
-    public String getKey() {
-        return key;
+    @Override
+    public String toString() {
+        return String.format("%s{name='%s', Display Name='%s'}", getClass().getSimpleName(), getName(), getDisplayName());
     }
->>>>>>> Stashed changes
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
 }

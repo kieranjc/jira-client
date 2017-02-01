@@ -25,18 +25,29 @@ import net.rcarz.jiraclient.RestClient;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+<<<<<<< Updated upstream
 import org.apache.commons.lang.BooleanUtils;
+=======
+>>>>>>> Stashed changes
 import org.apache.commons.lang.math.NumberUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+<<<<<<< Updated upstream
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+=======
+import java.util.List;
+>>>>>>> Stashed changes
 
 /**
  * A base class for Agile resources.
  *
+<<<<<<< Updated upstream
+=======
+ * @author pldupont
+>>>>>>> Stashed changes
  * @see "https://docs.atlassian.com/jira-software/REST/cloud/"
  */
 public abstract class AgileResource {
@@ -51,15 +62,25 @@ public abstract class AgileResource {
     private long id = 0;
     private String name;
     private String self;
+<<<<<<< Updated upstream
     private Map<String, Object> attributes = new HashMap<String, Object>();
+=======
+    private JSONObject attributes = new JSONObject();
+>>>>>>> Stashed changes
 
     /**
      * Creates a new Agile resource.
      *
      * @param restclient REST client instance
      * @param json       JSON payload
+<<<<<<< Updated upstream
      */
     public AgileResource(RestClient restclient, JSONObject json) {
+=======
+     * @throws JiraException when the retrieval fails
+     */
+    public AgileResource(RestClient restclient, JSONObject json) throws JiraException {
+>>>>>>> Stashed changes
         this.restclient = restclient;
         if (json != null) {
             deserialize(json);
@@ -73,8 +94,14 @@ public abstract class AgileResource {
      * @param r          a JSONObject instance
      * @param restclient REST client instance
      * @return a Resource instance or null if r isn't a JSONObject instance
+<<<<<<< Updated upstream
      */
     private static <T extends AgileResource> T getResource(
+=======
+     * @throws JiraException when the retrieval fails
+     */
+    protected static <T extends AgileResource> T getResource(
+>>>>>>> Stashed changes
             Class<T> type, Object r, RestClient restclient) throws JiraException {
 
         if (!(r instanceof JSONObject)) {
@@ -88,7 +115,11 @@ public abstract class AgileResource {
                 Constructor<T> constructor = type.getDeclaredConstructor(RestClient.class, JSONObject.class);
                 result = constructor.newInstance(restclient, r);
             } catch (Exception e) {
+<<<<<<< Updated upstream
                 throw new JiraException("Failed to deserialize object array.");
+=======
+                throw new JiraException("Failed to deserialize object.", e);
+>>>>>>> Stashed changes
             }
         }
 
@@ -101,26 +132,48 @@ public abstract class AgileResource {
      * @param type       Resource data type
      * @param ra         a JSONArray instance
      * @param restclient REST client instance
+<<<<<<< Updated upstream
      * @return a list of Resources found in ra
      */
     private static <T extends AgileResource> List<T> getResourceArray(
             Class<T> type, Object ra, RestClient restclient) throws JiraException {
+=======
+     * @param listName   The name of the list of items from the JSON result.
+     * @return a list of Resources found in ra
+     * @throws JiraException when the retrieval fails
+     */
+    protected static <T extends AgileResource> List<T> getResourceArray(
+            Class<T> type, Object ra, RestClient restclient, String listName) throws JiraException {
+>>>>>>> Stashed changes
         if (!(ra instanceof JSONObject)) {
             throw new JiraException("JSON payload is malformed");
         }
 
         JSONObject jo = (JSONObject) ra;
 
+<<<<<<< Updated upstream
         if (!jo.containsKey("values") || !(jo.get("values") instanceof JSONArray)) {
             throw new JiraException(type.getSimpleName() + " result is malformed");
+=======
+        if (!jo.containsKey(listName) || !(jo.get(listName) instanceof JSONArray)) {
+            throw new JiraException("No array found for name '" + listName + "'");
+>>>>>>> Stashed changes
         }
 
         List<T> results = new ArrayList<T>();
 
+<<<<<<< Updated upstream
         for (Object v : (JSONArray) jo.get("values")) {
             T item = getResource(type, v, restclient);
             if (item != null)
                 results.add(item);
+=======
+        for (Object v : (JSONArray) jo.get(listName)) {
+            T item = getResource(type, v, restclient);
+            if (item != null) {
+                results.add(item);
+            }
+>>>>>>> Stashed changes
         }
 
         return results;
@@ -130,10 +183,35 @@ public abstract class AgileResource {
      * Retrieves all boards visible to the session user.
      *
      * @param restclient REST client instance
+<<<<<<< Updated upstream
      * @return a list of boards
      * @throws JiraException when the retrieval fails
      */
     static <T extends AgileResource> List<T> list(RestClient restclient, Class<T> type, String url) throws JiraException {
+=======
+     * @param type       The type of the object to deserialize.
+     * @param url        The URL to call.
+     * @return a list of boards
+     * @throws JiraException when the retrieval fails
+     */
+    static <T extends AgileResource> List<T> list(
+            RestClient restclient, Class<T> type, String url) throws JiraException {
+        return list(restclient, type, url, "values");
+    }
+
+    /**
+     * Retrieves all boards visible to the session user.
+     *
+     * @param restclient REST client instance
+     * @param type       The type of the object to deserialize.
+     * @param url        The URL to call.
+     * @param listName   The name of the list of items in the JSON response.
+     * @return a list of boards
+     * @throws JiraException when the retrieval fails
+     */
+    static <T extends AgileResource> List<T> list(
+            RestClient restclient, Class<T> type, String url, String listName) throws JiraException {
+>>>>>>> Stashed changes
 
         JSON result;
         try {
@@ -145,7 +223,12 @@ public abstract class AgileResource {
         return getResourceArray(
                 type,
                 result,
+<<<<<<< Updated upstream
                 restclient
+=======
+                restclient,
+                listName
+>>>>>>> Stashed changes
         );
     }
 
@@ -173,6 +256,47 @@ public abstract class AgileResource {
     }
 
     /**
+<<<<<<< Updated upstream
+=======
+     * Extract from a sub list the Resource array, if present.
+     *
+     * @param type         Resource data type
+     * @param subJson      a JSONObject instance
+     * @param resourceName The name of the list of items from the JSON result.
+     * @param <T>          The type of Agile resource to return.
+     * @return The list of resources if present.
+     * @throws JiraException when the retrieval fails
+     */
+    <T extends AgileResource> List<T> getSubResourceArray(
+            Class<T> type, JSONObject subJson, String resourceName) throws JiraException {
+        List<T> result = null;
+        if (subJson.containsKey(resourceName)) {
+            result = getResourceArray(type, subJson.get(resourceName), getRestclient(), resourceName + "s");
+        }
+        return result;
+    }
+
+    /**
+     * Extract from a sub list the Resource, if present.
+     *
+     * @param type         Resource data type
+     * @param subJson      a JSONObject instance
+     * @param resourceName The name of the item from the JSON result.
+     * @param <T>          The type of Agile resource to return.
+     * @return The resource if present.
+     * @throws JiraException when the retrieval fails
+     */
+    <T extends AgileResource> T getSubResource(
+            Class<T> type, JSONObject subJson, String resourceName) throws JiraException {
+        T result = null;
+        if (subJson.containsKey(resourceName) && !subJson.get(resourceName).equals("null")) {
+            result = getResource(type, subJson.get(resourceName), getRestclient());
+        }
+        return result;
+    }
+
+    /**
+>>>>>>> Stashed changes
      * @return Internal JIRA ID.
      */
     public long getId() {
@@ -187,6 +311,16 @@ public abstract class AgileResource {
     }
 
     /**
+<<<<<<< Updated upstream
+=======
+     * @param name Setter for the resource name. In some case, the name is called something else.
+     */
+    void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+>>>>>>> Stashed changes
      * @return The resource URL.
      */
     public String getSelfURL() {
@@ -206,6 +340,7 @@ public abstract class AgileResource {
      * @param name The name of the attribute to retrieve.
      * @return The value of the attribute.
      */
+<<<<<<< Updated upstream
     String getAttribute(String name) {
         return (String) attributes.get(name);
     }
@@ -228,6 +363,10 @@ public abstract class AgileResource {
      */
     boolean getAttributeAsBoolean(String name) {
         return BooleanUtils.toBoolean(getAttribute(name));
+=======
+    public Object getAttribute(String name) {
+        return attributes.get(name);
+>>>>>>> Stashed changes
     }
 
     /**
@@ -236,17 +375,37 @@ public abstract class AgileResource {
      *
      * @param json The JSON object to read.
      */
+<<<<<<< Updated upstream
     protected void deserialize(JSONObject json) {
+=======
+    void deserialize(JSONObject json) throws JiraException {
+>>>>>>> Stashed changes
 
         id = getLong(json.get("id"));
         name = Field.getString(json.get("name"));
         self = Field.getString(json.get("self"));
+<<<<<<< Updated upstream
+=======
+        addAttributes(json);
+    }
+
+    /**
+     * Allow to add more attributes.
+     *
+     * @param json The json object to extract attributes from.
+     */
+    void addAttributes(JSONObject json) {
+>>>>>>> Stashed changes
         attributes.putAll(json);
     }
 
     long getLong(Object o) {
         if (o instanceof Integer || o instanceof Long) {
+<<<<<<< Updated upstream
             return Field.getInteger(o);
+=======
+            return Field.getLong(o);
+>>>>>>> Stashed changes
         } else if (o instanceof String && NumberUtils.isDigits((String) o)) {
             return NumberUtils.toLong((String) o, 0L);
         } else {
