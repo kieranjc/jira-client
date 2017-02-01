@@ -19,8 +19,6 @@
 
 package net.rcarz.jiraclient.greenhopper;
 
-import net.rcarz.jiraclient.Field;
-import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraException;
 import net.rcarz.jiraclient.RestClient;
 
@@ -39,6 +37,7 @@ public class SprintReport {
 
     private RestClient restclient = null;
     private Sprint sprint = null;
+    private net.rcarz.jiraclient.agile.Sprint jiraSprint = null;
     private List<SprintIssue> completedIssues = null;
     private List<SprintIssue> incompletedIssues = null;
     private List<SprintIssue> puntedIssues = null;
@@ -52,18 +51,27 @@ public class SprintReport {
 	private EstimateSum issuesNotCompletedInitialEstimateSum;
 	private EstimateSum issuesCompletedInAnotherSprintInitialEstimateSum;
 	private EstimateSum issuesCompletedInAnotherSprintEstimateSum;
+	private EstimateSum puntedIssuesInitialEstimateSum;
 
     /**
      * Creates a sprint report from a JSON payload.
      *
      * @param restclient REST client instance
      * @param json JSON payload
+     * @param sprintId 
      */
-    protected SprintReport(RestClient restclient, JSONObject json) {
+    protected SprintReport(RestClient restclient, JSONObject json, int sprintId) {
         this.restclient = restclient;
 
         if (json != null)
             deserialise(json);
+        
+        try {
+			jiraSprint = net.rcarz.jiraclient.agile.Sprint.get(restclient, sprintId);
+		} catch (JiraException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     private void deserialise(JSONObject json) {
@@ -95,12 +103,12 @@ public class SprintReport {
             map.get("allIssuesEstimateSum"));
         puntedIssuesEstimateSum = GreenHopperField.getEstimateSum(
             map.get("puntedIssuesEstimateSum"));
+        puntedIssuesInitialEstimateSum = GreenHopperField.getEstimateSum(
+        		map.get("puntedIssuesInitialEstimateSum"));       
         completedIssuesInitialEstimateSum = GreenHopperField.getEstimateSum(
         		map.get("completedIssuesInitialEstimateSum"));
         issuesNotCompletedInitialEstimateSum = GreenHopperField.getEstimateSum(
         		map.get("issuesNotCompletedInitialEstimateSum"));
-        completedIssuesInitialEstimateSum = GreenHopperField.getEstimateSum(
-        		map.get("puntedIssuesInitialEstimateSum"));
         issuesCompletedInAnotherSprintInitialEstimateSum = GreenHopperField.getEstimateSum(
         		map.get("issuesCompletedInAnotherSprintInitialEstimateSum"));
         issuesCompletedInAnotherSprintEstimateSum = GreenHopperField.getEstimateSum(
@@ -165,7 +173,7 @@ public class SprintReport {
     	if (!jo.containsKey("contents") || !(jo.get("contents") instanceof JSONObject))
     		throw new JiraException("Sprint report content is malformed");
     	
-    	return new SprintReport(restclient, (JSONObject)jo.get("contents"));
+    	return new SprintReport(restclient, (JSONObject)jo.get("contents"), sprintId);
     }
 
     public Sprint getSprint() {
@@ -199,6 +207,10 @@ public class SprintReport {
     public EstimateSum getPuntedIssuesEstimateSum() {
         return puntedIssuesEstimateSum;
     }
+    
+    public EstimateSum getPuntedIssuesInitialEstimateSum() {
+    	return puntedIssuesInitialEstimateSum;
+    }
 
     public List<String> getIssueKeysAddedDuringSprint() {
         return issueKeysAddedDuringSprint;
@@ -222,6 +234,17 @@ public class SprintReport {
 
 	public EstimateSum getIssuesCompletedInAnotherSprintEstimateSum() {
 		return issuesCompletedInAnotherSprintEstimateSum;
+	}
+	
+    /**
+     * Retrieves the full JIRA Sprint.
+     *
+     * @return a Jira Sprint
+     *
+     * @throws JiraException when the retrieval fails
+     */	
+	public net.rcarz.jiraclient.agile.Sprint getJiraSprint() throws JiraException {
+		return jiraSprint;
 	}
 }
 
