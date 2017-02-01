@@ -3,10 +3,6 @@ package net.rcarz.jiraclient.agile
 import net.rcarz.jiraclient.JiraException
 import net.rcarz.jiraclient.RestClient
 import net.rcarz.jiraclient.RestException
-<<<<<<< Updated upstream
-=======
-import net.sf.json.JSONObject
->>>>>>> Stashed changes
 import net.sf.json.JSONSerializer
 import org.hamcrest.core.IsEqual
 import org.hamcrest.core.IsNot
@@ -37,11 +33,7 @@ class SprintTest extends AbstractResourceTest {
 
         assertThat sprints, new IsNot<>(new IsNull())
         assertThat sprints.size(), new IsEqual<Integer>(2)
-<<<<<<< Updated upstream
         "Assert equals to Sprint ${JSONResources.SPRINT_ID}"(sprints.get(0))
-=======
-        "Assert equals to Sprint"(sprints.get(0))
->>>>>>> Stashed changes
     }
 
     @Test
@@ -64,11 +56,7 @@ class SprintTest extends AbstractResourceTest {
 
         Sprint sprint = Sprint.get(mockRestClient, JSONResources.SPRINT_ID);
 
-<<<<<<< Updated upstream
         "Assert equals to Sprint ${JSONResources.SPRINT_ID}"(sprint)
-=======
-        "Assert equals to Sprint"(sprint)
->>>>>>> Stashed changes
     }
 
     @Test
@@ -82,21 +70,4 @@ class SprintTest extends AbstractResourceTest {
 
         Sprint.get(mockRestClient, 666);
     }
-<<<<<<< Updated upstream
-=======
-
-    @Test
-    void "Given a valid Sprint, when calling getIssues(), then receive a list of Issues."() {
-        RestClient mockRestClient = "given a REST Client"()
-        Sprint mockSprint = new Sprint(mockRestClient, JSONSerializer.toJSON(JSONResources.SPRINT) as JSONObject)
-        when(mockRestClient.get(AgileResource.RESOURCE_URI + "sprint/${JSONResources.SPRINT_ID}/issue"))
-                .thenReturn(JSONSerializer.toJSON(JSONResources.LIST_OF_ISSUES))
-
-        List<Issue> issues = mockSprint.getIssues();
-
-        assertThat issues, new IsNot<>(new IsNull())
-        assertThat issues.size(), new IsEqual<Integer>(4)
-        "Assert equals to Issue"(issues.get(0))
-    }
->>>>>>> Stashed changes
 }

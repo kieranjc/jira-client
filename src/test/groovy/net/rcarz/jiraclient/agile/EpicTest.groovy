@@ -3,23 +3,11 @@ package net.rcarz.jiraclient.agile
 import net.rcarz.jiraclient.JiraException
 import net.rcarz.jiraclient.RestClient
 import net.rcarz.jiraclient.RestException
-<<<<<<< Updated upstream
 import net.sf.json.JSONSerializer
-=======
-import net.sf.json.JSONObject
-import net.sf.json.JSONSerializer
-import org.hamcrest.core.IsEqual
-import org.hamcrest.core.IsNot
-import org.hamcrest.core.IsNull
->>>>>>> Stashed changes
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
 
-<<<<<<< Updated upstream
-=======
-import static org.junit.Assert.assertThat
->>>>>>> Stashed changes
 import static org.mockito.Mockito.when
 
 /**
@@ -39,11 +27,7 @@ class EpicTest extends AbstractResourceTest {
 
         Epic epic = Epic.get(mockRestClient, JSONResources.EPIC_ID);
 
-<<<<<<< Updated upstream
         "Assert equals to Epic ${JSONResources.EPIC_ID}"(epic)
-=======
-        "Assert equals to Epic"(epic)
->>>>>>> Stashed changes
     }
 
     @Test
@@ -57,67 +41,4 @@ class EpicTest extends AbstractResourceTest {
 
         Epic.get(mockRestClient, 666);
     }
-<<<<<<< Updated upstream
-=======
-
-    @Test
-    void "Given an epic without the issue cache, when calling asIssue(false), then call the REST Api."() {
-        RestClient mockRestClient = "given a REST Client"()
-        when(mockRestClient.get(AgileResource.RESOURCE_URI + "issue/" + JSONResources.EPIC_ID))
-                .thenReturn(JSONSerializer.toJSON(JSONResources.ISSUE))
-        Epic mockEpic = new Epic(mockRestClient, JSONSerializer.toJSON(JSONResources.EPIC) as JSONObject)
-
-        assertThat mockEpic.issue, new IsNull()
-        Issue issue = mockEpic.asIssue(false)
-
-        "Assert equals to Issue"(issue)
-        assertThat mockEpic.issue, new IsNot<>(new IsNull())
-    }
-
-    @Test
-    void "Given an epic with the issue cache, when calling asIssue(false), then use the cache version."() {
-        RestClient mockRestClient = "given a REST Client"()
-        Epic mockEpic = new Epic(mockRestClient, JSONSerializer.toJSON(JSONResources.EPIC) as JSONObject)
-        Issue mockIssue = new Issue(mockRestClient, JSONSerializer.toJSON(JSONResources.ISSUE) as JSONObject)
-        mockEpic.issue = mockIssue
-
-        assertThat mockEpic.issue, new IsNot<>(new IsNull())
-        Issue issue = mockEpic.asIssue(false)
-
-        "Assert equals to Issue"(issue)
-        assertThat mockEpic.issue, new IsNot<>(new IsNull())
-        assert mockEpic.issue == mockIssue
-    }
-
-    @Test
-    void "Given an epic with the issue cache, when calling asIssue(true), then call the REST Api."() {
-        RestClient mockRestClient = "given a REST Client"()
-        when(mockRestClient.get(AgileResource.RESOURCE_URI + "issue/" + JSONResources.EPIC_ID))
-                .thenReturn(JSONSerializer.toJSON(JSONResources.ISSUE))
-        Epic mockEpic = new Epic(mockRestClient, JSONSerializer.toJSON(JSONResources.EPIC) as JSONObject)
-        Issue mockIssue = new Issue(mockRestClient, JSONSerializer.toJSON(JSONResources.ISSUE) as JSONObject)
-        mockEpic.issue = mockIssue
-
-        assertThat mockEpic.issue, new IsNot<>(new IsNull())
-        Issue issue = mockEpic.asIssue(true)
-
-        "Assert equals to Issue"(issue)
-        assertThat mockEpic.issue, new IsNot<>(new IsNull())
-        assert mockEpic.issue != mockIssue
-    }
-
-    @Test
-    void "Given a valid Epic, when calling getIssues(), then receive a list of Issues."() {
-        RestClient mockRestClient = "given a REST Client"()
-        Epic mockEpic = new Epic(mockRestClient, JSONSerializer.toJSON(JSONResources.EPIC) as JSONObject)
-        when(mockRestClient.get(AgileResource.RESOURCE_URI + "epic/${JSONResources.EPIC_ID}/issue"))
-                .thenReturn(JSONSerializer.toJSON(JSONResources.LIST_OF_ISSUES))
-
-        List<Issue> issues = mockEpic.getIssues();
-
-        assertThat issues, new IsNot<>(new IsNull())
-        assertThat issues.size(), new IsEqual<Integer>(4)
-        "Assert equals to Issue"(issues.get(0))
-    }
->>>>>>> Stashed changes
 }

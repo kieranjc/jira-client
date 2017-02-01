@@ -27,11 +27,7 @@ class IssueTest extends AbstractResourceTest {
 
         Issue issue = Issue.get(mockRestClient, JSONResources.ISSUE_ID);
 
-<<<<<<< Updated upstream
         "Assert equals to Issue ${JSONResources.ISSUE_ID}"(issue)
-=======
-        "Assert equals to Issue"(issue)
->>>>>>> Stashed changes
     }
 
     @Test
@@ -54,11 +50,7 @@ class IssueTest extends AbstractResourceTest {
 
         Issue issue = Issue.get(mockRestClient, JSONResources.ISSUE_KEY);
 
-<<<<<<< Updated upstream
         "Assert equals to Issue ${JSONResources.ISSUE_KEY}"(issue)
-=======
-        "Assert equals to Issue"(issue)
->>>>>>> Stashed changes
     }
 
     @Test
@@ -72,18 +64,4 @@ class IssueTest extends AbstractResourceTest {
 
         Issue.get(mockRestClient, "HSP-2");
     }
-<<<<<<< Updated upstream
-=======
-
-    @Test
-    void "Given an issue empty, when calling Issue.get(id), then deserialize properly."() {
-        RestClient mockRestClient = "given a REST Client"()
-        when(mockRestClient.get(AgileResource.RESOURCE_URI + "issue/" + JSONResources.BLANK_ISSUE1_ID))
-                .thenReturn(JSONSerializer.toJSON(JSONResources.BLANK_ISSUE1))
-
-        Issue issue = Issue.get(mockRestClient, JSONResources.BLANK_ISSUE1_ID);
-
-        "Assert equals to Issue Blank"(issue)
-    }
->>>>>>> Stashed changes
 }
