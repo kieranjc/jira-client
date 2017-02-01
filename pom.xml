@@ -93,4 +93,7 @@
     </dependency>
 
   </dependencies>
+  <build>
+  	<finalName>jira-client-altify</finalName> 		
+  </build>
 </project>
