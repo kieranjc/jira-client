@@ -68,16 +68,7 @@ public final class Field {
     public static final String UPDATED_DATE = "updated";
     public static final String TRANSITION_TO_STATUS = "to";
     public static final String DATE_FORMAT = "yyyy-MM-dd";
-<<<<<<< Updated upstream
     public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
-=======
-<<<<<<< HEAD
-    public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
-=======
-    public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
-
->>>>>>> pldupont/master
->>>>>>> Stashed changes
     private Field() { }
 
     /**
@@ -101,22 +92,14 @@ public final class Field {
      *
      * @param c a JSONObject instance
      * @param restclient REST client instance
-     * @param issueKey key of the parent issue
      *
      * @return a list of comments found in c
      */
-    public static List<Comment> getComments(Object c, RestClient restclient,
-                                            String issueKey) {
+    public static List<Comment> getComments(Object c, RestClient restclient) {
         List<Comment> results = new ArrayList<Comment>();
 
-        if (c instanceof JSONObject && !((JSONObject)c).isNullObject()) {
-            results = getResourceArray(
-                Comment.class,
-                ((Map)c).get("comments"),
-                restclient,
-                issueKey
-            );
-        }
+        if (c instanceof JSONObject && !((JSONObject)c).isNullObject())
+            results = getResourceArray(Comment.class, ((Map)c).get("comments"), restclient);
 
         return results;
     }
@@ -224,7 +207,6 @@ public final class Field {
     }
 
     /**
-<<<<<<< Updated upstream
      * Gets a long from the given object.
      *
      * @param i a Long or an Integer instance
@@ -239,21 +221,6 @@ public final class Field {
         if (i instanceof Integer)
             result = ((Integer) i).intValue();
 
-=======
-     +     * Gets a long from the given object.
-     +     *
-     +     * @param i a Long or an Integer instance
-     +     *
-     +     * @return a long primitive or 0 if i isn't a Long or an Integer instance
-     +     */
-    public static long getLong(Object i) {
-        long result = 0;
-        if (i instanceof Long) {
-            result = ((Long) i).longValue();
-        } else if (i instanceof Integer) {
-            result = ((Integer) i).intValue();
-        }
->>>>>>> Stashed changes
         return result;
     }
 
@@ -295,22 +262,6 @@ public final class Field {
     public static <T extends Resource> T getResource(
         Class<T> type, Object r, RestClient restclient) {
 
-        return getResource(type, r, restclient, null);
-    }
-
-    /**
-     * Gets a JIRA resource from the given object.
-     *
-     * @param type Resource data type
-     * @param r a JSONObject instance
-     * @param restclient REST client instance
-     * @param parentId id/key of the parent resource
-     *
-     * @return a Resource instance or null if r isn't a JSONObject instance
-     */
-    public static <T extends Resource> T getResource(
-        Class<T> type, Object r, RestClient restclient, String parentId) {
-
         T result = null;
 
         if (r instanceof JSONObject && !((JSONObject)r).isNullObject()) {
@@ -323,7 +274,7 @@ public final class Field {
             else if (type == ChangeLogItem.class)
                 result = (T)new ChangeLogItem(restclient, (JSONObject)r);
             else if (type == Comment.class)
-                result = (T)new Comment(restclient, (JSONObject)r, parentId);
+                result = (T)new Comment(restclient, (JSONObject)r);
             else if (type == Component.class)
                 result = (T)new Component(restclient, (JSONObject)r);
             else if (type == CustomFieldOption.class)
@@ -340,8 +291,6 @@ public final class Field {
                 result = (T)new Priority(restclient, (JSONObject)r);
             else if (type == Project.class)
                 result = (T)new Project(restclient, (JSONObject)r);
-            else if (type == ProjectCategory.class)
-                result = (T)new ProjectCategory(restclient, (JSONObject)r);
             else if (type == RemoteLink.class)
                 result = (T)new RemoteLink(restclient, (JSONObject)r);
             else if (type == Resolution.class)
@@ -413,34 +362,11 @@ public final class Field {
     public static <T extends Resource> List<T> getResourceArray(
         Class<T> type, Object ra, RestClient restclient) {
 
-        return getResourceArray(type, ra, restclient, null);
-    }
-
-    /**
-     * Gets a list of JIRA resources from the given object.
-     *
-     * @param type Resource data type
-     * @param ra a JSONArray instance
-     * @param restclient REST client instance
-     * @param parentId id/key of the parent resource
-     *
-     * @return a list of Resources found in ra
-     */
-    public static <T extends Resource> List<T> getResourceArray(
-        Class<T> type, Object ra, RestClient restclient, String parentId) {
-
         List<T> results = new ArrayList<T>();
 
         if (ra instanceof JSONArray) {
             for (Object v : (JSONArray)ra) {
-                T item = null;
-
-                if (parentId != null) {
-                    item = getResource(type, v, restclient, parentId);
-                } else {
-                    item = getResource(type, v, restclient);
-                }
-
+                T item = getResource(type, v, restclient);
                 if (item != null)
                     results.add(item);
             }
@@ -558,17 +484,10 @@ public final class Field {
                     itemMap.put(ValueType.NAME.toString(), realValue.toString());
 
                 realResult = itemMap;
-            } else if ( type.equals("option") ||
-                    (
-                    type.equals("string") && custom != null
+            } else if (type.equals("string") && custom != null
                     && (custom.equals("com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes") ||
-<<<<<<< Updated upstream
                     custom.equals("com.atlassian.jira.plugin.system.customfieldtypes:multiselect"))) {
 
-=======
-                    custom.equals("com.atlassian.jira.plugin.system.customfieldtypes:multiselect")))) {
-                
->>>>>>> Stashed changes
                 realResult = new JSONObject();
                 ((JSONObject)realResult).put(ValueType.VALUE.toString(), realValue.toString());
             } else if (type.equals("string"))

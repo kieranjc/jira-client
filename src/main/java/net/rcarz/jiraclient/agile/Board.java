@@ -33,11 +33,8 @@ import java.util.List;
  */
 public class Board extends AgileResource {
 
-<<<<<<< Updated upstream
     private static final String ATTR_TYPE = "type";
 
-=======
->>>>>>> Stashed changes
     private String type;
 
     /**
@@ -46,11 +43,7 @@ public class Board extends AgileResource {
      * @param restclient REST client instance
      * @param json       JSON payload
      */
-<<<<<<< Updated upstream
     protected Board(RestClient restclient, JSONObject json) {
-=======
-    protected Board(RestClient restclient, JSONObject json) throws JiraException {
->>>>>>> Stashed changes
         super(restclient, json);
     }
 
@@ -78,15 +71,9 @@ public class Board extends AgileResource {
     }
 
     @Override
-<<<<<<< Updated upstream
     protected void deserialize(JSONObject json) {
         super.deserialize(json);
         type = Field.getString(json.get(ATTR_TYPE));
-=======
-    protected void deserialize(JSONObject json) throws JiraException {
-        super.deserialize(json);
-        type = Field.getString(json.get("type"));
->>>>>>> Stashed changes
     }
 
     /**
@@ -104,7 +91,6 @@ public class Board extends AgileResource {
         return Sprint.getAll(getRestclient(), getId());
     }
 
-<<<<<<< Updated upstream
 //    /**
 //     * Retrieves the backlog data for this rapid view.
 //     *
@@ -115,30 +101,5 @@ public class Board extends AgileResource {
 //    public Backlog getBacklogData() throws JiraException {
 //        return Backlog.get(restclient, this);
 //    }
-=======
-    /**
-     * @return All issues in the Board backlog.
-     * @throws JiraException when the retrieval fails
-     */
-    public List<Issue> getBacklog() throws JiraException {
-        return AgileResource.list(getRestclient(), Issue.class, RESOURCE_URI + "board/" + getId() + "/backlog", "issues");
-    }
-
-    /**
-     * @return All issues without epic in the Board .
-     * @throws JiraException when the retrieval fails
-     */
-    public List<Issue> getIssuesWithoutEpic() throws JiraException {
-        return AgileResource.list(getRestclient(), Issue.class, RESOURCE_URI + "board/" + getId() + "/epic/none/issue", "issues");
-    }
-
-    /**
-     * @return All epics associated to the Board.
-     * @throws JiraException when the retrieval fails
-     */
-    public List<Epic> getEpics() throws JiraException {
-        return AgileResource.list(getRestclient(), Epic.class, RESOURCE_URI + "board/" + getId() + "/epic");
-    }
->>>>>>> Stashed changes
 }
 
