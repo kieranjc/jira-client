@@ -274,3 +274,69 @@ public class Example {
         }
     }
 ```
+
+## Agile API ##
+https://docs.atlassian.com/jira-software/REST/cloud/
+
+### Agile supported calls ###
+ 1. [AgileClient](src/main/java/net/rcarz/jiraclient/agile/AgileClient.java)
+    1. GET /rest/agile/1.0/board
+    1. GET /rest/agile/1.0/board/{boardId}
+    1. GET /rest/agile/1.0/sprint/{sprintId}
+    1. GET /rest/agile/1.0/issue/{issueIdOrKey}
+ 1. [Board](src/main/java/net/rcarz/jiraclient/agile/Board.java)
+    1. GET /rest/agile/1.0/board
+    1. GET /rest/agile/1.0/board/{boardId}
+    1. GET /rest/agile/1.0/board/{boardId}/sprint
+ 1. [Sprint](src/main/java/net/rcarz/jiraclient/agile/Sprint.java)
+    1. GET /rest/agile/1.0/sprint/{sprintId}
+    1. GET /rest/agile/1.0/board/{boardId}/sprint
+ 1. [Issue](src/main/java/net/rcarz/jiraclient/agile/Issue.java)
+    1. GET /rest/agile/1.0/issue/{issueIdOrKey}
+
+ 1. To implement
+    1. -- GET /rest/agile/1.0/board/{boardId}/backlog
+    1. -- GET /rest/agile/1.0/board/{boardId}/epic
+    1. -- GET /rest/agile/1.0/board/{boardId}/epic/{epicId}/issue
+    1. -- GET /rest/agile/1.0/board/{boardId}/epic/none/issue
+    1. -- GET /rest/agile/1.0/board/{boardId}/sprint/{sprintId}/issue
+    1. -- GET /rest/agile/1.0/epic/{epicIdOrKey}/issue
+    1. -- GET /rest/agile/1.0/epic/none/issue
+    1. -- GET /rest/agile/1.0/sprint/{sprintId}/issue
+    
+    
+
+### Agile Example ###
+
+```java
+import java.util.List;
+
+import net.rcarz.jiraclient.BasicCredentials;
+import net.rcarz.jiraclient.Issue;
+import net.rcarz.jiraclient.JiraClient;
+import net.rcarz.jiraclient.JiraException;
+import net.rcarz.jiraclient.agile.Board;
+import net.rcarz.jiraclient.agile.AgileClient;
+
+public class Example {
+
+    public static void main(String[] args) {
+
+        BasicCredentials creds = new BasicCredentials("batman", "pow! pow!");
+        JiraClient jira = new JiraClient("https://jira.example.com/jira", creds);
+        AgileClient agileClient = new AgileClient(jira);
+
+        try {
+            /* Retrieve all Boards */
+            List<Board> allBoards = agileClient.getBoards();
+        } catch (JiraException ex) {
+            System.err.println(ex.getMessage());
+
+            if (ex.getCause() != null) {
+                System.err.println(ex.getCause().getMessage());
+            }
+        }
+    }
+}
+```
+

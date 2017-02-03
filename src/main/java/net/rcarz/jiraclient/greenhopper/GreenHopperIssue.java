@@ -73,7 +73,7 @@ public abstract class GreenHopperIssue extends GreenHopperResource {
         key = Field.getString(map.get("key"));
         hidden = Field.getBoolean(map.get("hidden"));
         summary = Field.getString(map.get("summary"));
-        typeName = Field.getString(map.get("key"));
+        typeName = Field.getString(map.get("typeName"));
         typeId = Field.getString(map.get("typeId"));
         typeUrl = Field.getString(map.get("typeUrl"));
         priorityUrl = Field.getString(map.get("priorityUrl"));

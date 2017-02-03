@@ -543,9 +543,11 @@ public class Issue extends Resource {
 		private Integer startAt;
 		private List<Issue> issues;
 		private int total;
+        private String endpoint = "search";
+        private String baseUrl = null;
 		
         public IssueIterator(RestClient restclient, String jql,
-                String includedFields, String expandFields, Integer maxResults, Integer startAt)
+                String includedFields, String expandFields, Integer maxResults, Integer startAt, String endpoint, String baseUrl)
                         throws JiraException {
 			this.restclient = restclient;
 			this.jql = jql;
@@ -553,9 +555,13 @@ public class Issue extends Resource {
 			this.expandFields = expandFields;
 			this.maxResults = maxResults;
 			this.startAt = startAt;
+			if(endpoint != null) {
+				this.endpoint = endpoint;
+			}
+			this.baseUrl = baseUrl;
         }
     	
-		@Override
+		//@Override
 		public boolean hasNext() {
 			if (nextIssue != null) {
 				return true;
@@ -568,7 +574,7 @@ public class Issue extends Resource {
 			return nextIssue != null;
 		}
 
-		@Override
+		//@Override
 		public Issue next() {
 			if (! hasNext()) {
 				throw new NoSuchElementException();
@@ -579,7 +585,7 @@ public class Issue extends Resource {
 		}
 
 
-		@Override
+		//@Override
 		public void remove() {
 			throw new UnsupportedOperationException("Method remove() not support for class " + this.getClass().getName());
 		}
@@ -633,8 +639,8 @@ public class Issue extends Resource {
 	        JSON result = null;
 
 	        try {
-	            URI searchUri = createSearchURI(restclient, jql, includedFields,
-						expandFields, maxResults, startAt);
+				URI searchUri = createSearchURI(restclient, jql, includedFields,
+						expandFields, maxResults, startAt, endpoint, baseUrl);
 	            result = restclient.get(searchUri);
 	        } catch (Exception ex) {
 	            throw new JiraException("Failed to search issues", ex);
@@ -649,7 +655,7 @@ public class Issue extends Resource {
 	
 			this.startAt = Field.getInteger(map.get("startAt"));
 			this.maxResults = Field.getInteger(map.get("maxResults"));
-	    	this.total = Field.getInteger(map.get("total"));
+	    	this.total = Field.getInteger(map.get("total"));	    	
 	    	this.issues = Field.getResourceArray(Issue.class, map.get("issues"), restclient);
 	    	return issues;
 		}
@@ -670,23 +676,34 @@ public class Issue extends Resource {
 		private String expandFields;
 		private Integer startAt;
 		private IssueIterator issueIterator;
+		private String endpoint;
+		private String baseUrl;
 
 	    public SearchResult(RestClient restclient, String jql,
-	            String includedFields, String expandFields, Integer maxResults, Integer startAt) throws JiraException {
+	            String includedFields, String expandFields, Integer maxResults, Integer startAt, String endpoint, String baseUrl) throws JiraException {
 			this.restclient = restclient;
 			this.jql = jql;
 			this.includedFields = includedFields;
 			this.expandFields = expandFields;
+			this.endpoint = endpoint;
+			this.baseUrl = baseUrl;
 			initSearchResult(maxResults, start);
         }
+	    
+	    public SearchResult(RestClient restclient, String jql,
+	    		String includedFields, String expandFields, Integer maxResults, Integer startAt) throws JiraException {
+	    	new SearchResult(restclient, expandFields, expandFields, expandFields, startAt, startAt, "search", null);
+	    }
         
         private void initSearchResult(Integer maxResults, Integer start) throws JiraException {
-        	this.issueIterator = new IssueIterator(restclient, jql, includedFields, expandFields, maxResults, startAt);
+        	this.issueIterator = new IssueIterator(restclient, jql, includedFields, expandFields, maxResults, startAt, endpoint, baseUrl);
         	this.issueIterator.hasNext();
         	this.max = issueIterator.maxResults;
         	this.start = issueIterator.startAt;
         	this.issues = issueIterator.issues;
         	this.total = issueIterator.total;
+        	this.endpoint = issueIterator.endpoint;
+        	this.baseUrl = issueIterator.baseUrl;
 		}
 
 		/**
@@ -1350,6 +1367,15 @@ public class Issue extends Resource {
 
         return sr;
     }
+    
+    public static SearchResult search(RestClient restclient, String jql,
+    		String includedFields, String expandFields, Integer maxResults, Integer startAt, String endpoint, String baseUrl)
+    				throws JiraException {
+    	
+    	SearchResult sr = new SearchResult(restclient, jql, includedFields, expandFields, maxResults, startAt, endpoint, baseUrl);
+    	
+    	return sr;
+    }
 
 	private static JSON executeSearch(RestClient restclient, String jql,
 			String includedFields, String expandFields, Integer maxResults,
@@ -1358,7 +1384,7 @@ public class Issue extends Resource {
 
         try {
             URI searchUri = createSearchURI(restclient, jql, includedFields,
-					expandFields, maxResults, startAt);
+					expandFields, maxResults, startAt, "search", null);
             result = restclient.get(searchUri);
         } catch (Exception ex) {
             throw new JiraException("Failed to search issues", ex);
@@ -1379,12 +1405,13 @@ public class Issue extends Resource {
 	 * @param expandFields
 	 * @param maxResults
 	 * @param startAt
+	 * @param endpoint TODO
 	 * @return the URI to execute a jql search.
 	 * @throws URISyntaxException
 	 */
 	private static URI createSearchURI(RestClient restclient, String jql,
 			String includedFields, String expandFields, Integer maxResults,
-			Integer startAt) throws URISyntaxException {
+			Integer startAt, String endpoint, String baseUrl) throws URISyntaxException {
 		Map<String, String> queryParams = new HashMap<String, String>();
 		queryParams.put("jql", jql);
 		if(maxResults != null){
@@ -1400,7 +1427,9 @@ public class Issue extends Resource {
 		    queryParams.put("startAt", String.valueOf(startAt));
 		}
 
-		URI searchUri = restclient.buildURI(getBaseUri() + "search", queryParams);
+		String baseUri = (baseUrl == null) ? getBaseUri() : baseUrl;
+		
+		URI searchUri = restclient.buildURI(baseUri + endpoint, queryParams);
 		return searchUri;
 	}
 

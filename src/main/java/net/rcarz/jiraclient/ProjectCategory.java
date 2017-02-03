@@ -1,7 +1,7 @@
 /**
  * jira-client - a simple JIRA REST client
  * Copyright (c) 2013 Bob Carroll (bob.carroll@alum.rit.edu)
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -25,22 +25,20 @@ import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 /**
- * Represents an issue status.
+ * Represents a project category.
  */
-public class Status extends Resource {
+public class ProjectCategory extends Resource {
 
-    private String description = null;
-    private String iconUrl = null;
     private String name = null;
-	private String statusCategory = null;
+    private String description = null;
 
     /**
-     * Creates a status from a JSON payload.
+     * Creates a category from a JSON payload.
      *
      * @param restclient REST client instance
      * @param json JSON payload
      */
-    protected Status(RestClient restclient, JSONObject json) {
+    protected ProjectCategory(RestClient restclient, JSONObject json) {
         super(restclient);
 
         if (json != null)
@@ -53,10 +51,7 @@ public class Status extends Resource {
         self = Field.getString(map.get("self"));
         id = Field.getString(map.get("id"));
         description = Field.getString(map.get("description"));
-        iconUrl = Field.getString(map.get("iconUrl"));
         name = Field.getString(map.get("name"));
-        JSONObject sc = (JSONObject)map.get("statusCategory");
-        statusCategory  = (String)sc.get("key");
     }
 
     /**
@@ -69,13 +64,13 @@ public class Status extends Resource {
      *
      * @throws JiraException when the retrieval fails
      */
-    public static Status get(RestClient restclient, String id)
-        throws JiraException {
+    public static ProjectCategory get(RestClient restclient, String id)
+            throws JiraException {
 
         JSON result = null;
 
         try {
-            result = restclient.get(getBaseUri() + "status/" + id);
+            result = restclient.get(getBaseUri() + "projectCategory/" + id);
         } catch (Exception ex) {
             throw new JiraException("Failed to retrieve status " + id, ex);
         }
@@ -83,7 +78,7 @@ public class Status extends Resource {
         if (!(result instanceof JSONObject))
             throw new JiraException("JSON payload is malformed");
 
-        return new Status(restclient, (JSONObject)result);
+        return new ProjectCategory(restclient, (JSONObject)result);
     }
 
     @Override
@@ -97,14 +92,6 @@ public class Status extends Resource {
 
     public String getName() {
         return name;
-    }
-
-    public String getIconUrl() {
-        return iconUrl;
-    }
-    
-    public String getStatusCategory() {
-    	return statusCategory;
     }
 }
 
