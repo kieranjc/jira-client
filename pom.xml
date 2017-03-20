@@ -91,9 +91,16 @@
       <version>2.4.6</version>
       <scope>test</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>6.9.8</version>
+      <scope>test</scope>
+    </dependency>    
 
   </dependencies>
   <build>
-  	<finalName>jira-client-altify</finalName> 		
+  	<finalName>jira-client-axway</finalName> 		
   </build>
 </project>
