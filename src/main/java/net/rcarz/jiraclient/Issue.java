@@ -693,7 +693,7 @@ public class Issue extends Resource {
 	    public SearchResult(RestClient restclient, String jql,
 	    		String includedFields, String expandFields, Integer maxResults, Integer startAt) throws JiraException {
 	    	
-	    	this(restclient, jql, includedFields, expandFields, maxResults, startAt, includedFields, null);
+	    	this(restclient, jql, includedFields, expandFields, maxResults, startAt, "search", null);
 	    
 	    }
         
